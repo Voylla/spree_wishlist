@@ -3,11 +3,13 @@ require 'cancan/matchers'
 
 describe WishlistAbility do
 
-  let(:user) { Spree::User.new }
-  let(:ability) { WishlistAbility.new(user) }
+  let(:user) { User.new }
+  let(:ability) { Ability.new(user) }
   let(:token) { nil }
 
   TOKEN = "token123"
+
+  after(:each) { Ability.abilities = Set.new }
 
   shared_examples_for "allow CRUD" do
     it "should allow create" do
@@ -77,12 +79,12 @@ describe WishlistAbility do
 
   context "for Wishlist" do
     context "private" do
-      let(:resource) { Spree::Wishlist.new(:is_private => true) }
+      let(:resource) { Wishlist.new(:is_private => true) }
       pending
     end
 
     context "public" do
-      let(:resource) { Spree::Wishlist.new(:is_private => false) }
+      let(:resource) { Wishlist.new(:is_private => false) }
       context "requested by same user" do
         before { resource.user = user }
         pending
